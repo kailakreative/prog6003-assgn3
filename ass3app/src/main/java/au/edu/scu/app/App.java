@@ -13,9 +13,8 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 
-import com.amazonaws.services.dynamodbv2.document.ItemCollection;
-import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
-import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
+import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
+
 
 
 public class App implements RequestHandler<Map<String, Object>, String>
@@ -37,9 +36,15 @@ public class App implements RequestHandler<Map<String, Object>, String>
        
        try {
            Table table = ddb.getTable("Car");
-           Item item = table.getItem("Id", 0);
            
-           for (int = 0; i < carIDs.lenght)
+           GetItemSpec spec = new GetItemSpec()
+        .withPrimaryKey("Id", id)
+        .withProjectionExpression("Id, Make, Model, Year, Colour")
+        .withConsistentRead(true);
+        
+        Item item = table.getItem(spec);
+        System.out.println(item.toJSONPretty());
+
            
            //add if-condition for null object = error message
            //if found get id and attributes assigned
