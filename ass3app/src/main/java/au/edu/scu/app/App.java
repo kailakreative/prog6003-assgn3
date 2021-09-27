@@ -10,7 +10,6 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 
@@ -25,44 +24,29 @@ public class App implements RequestHandler<Map<String, Object>, String>
     @Override
     public String handleRequest(Map<String, Object> input, Context context) {
         
-      int id = (String) input.get("id");
+      int id = (int) input.get("id");
        String message = "";
        
        
       //retrieve Car table entry
       AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build(); 
       DynamoDB ddb = new DynamoDB(client);
-       
+      
+      
       try {
-          result = ddb.getTable("Car").getItem("Id", id);
-          
-          if(result = null) {
-           message = "ID does not exist. Try Again.";
-           return message;
-            
-              
-          }
-          else {
+      Table table = ddb.getTable("Car");
 
-              
-            int id = item.getInt(String "Id");
-            String make = item.getJSON(String "Make");
-            String model = item.getJSON(String "Model");
-            int year = item.getString("Year");
-            String colour = item.getString("Colour");
-            
-            message = "Id: " + id + ", Make: " + make + ", Model: " + model + ", Year: " + year + ", Colour: " + color;
-            return message;
+      Item item = table.getItem("Id", id);
 
-          }
-
-           
-           
+      message = item.toJSONPretty();
+      return message;
 
       }
-      catch(Exception exp) {
-           
+       catch (Exception exp) {
+         
+         return message;
       }
+
        
         
     }
