@@ -28,22 +28,24 @@ public class App implements RequestHandler<Map<String, Object>, String>
     public String handleRequest(Map<String, Object> input, Context context) {
         
         //initialise variables
+        // int id = (int) input.get("id");
       String id = (String) input.get("id");
-      int idValue = Integer.parseInt(id); //this code will convert id to string
+      int idValue = Integer.valueOf(id); //this code will convert id to string
        String message = "";
       
       
       //retrieve single talbe entry
       try {
       Table table = ddb.getTable("Car"); //access to target ddb table Car
+      Item item = table.getItem("Id", idValue);
       
-     GetItemSpec spec = new GetItemSpec()
-     .withPrimaryKey("Id", idValue)
-     .withProjectionExpression("Id, Make, Model, Year, Colour")
-     .withConsistentRead(true);
+    //  GetItemSpec spec = new GetItemSpec()
+    //  .withPrimaryKey("Id", id)
+    //  .withProjectionExpression("Id, Make, Model, Year, Colour")
+    //  .withConsistentRead(true);
 
       
-      Item item = table.getItem(spec);
+    //   Item item = table.getItem(spec);
     //   String make = item.getItem("Make");
     //   String model = item.getItem("Model");
     //   int year = item.getInt("Year");
