@@ -16,6 +16,10 @@ import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 
 public class App implements RequestHandler<Map<String, Object>, String>
 {
+    
+    AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
+    DynamoDB ddb = new DynamoDB(client);
+    
     public static void main( String[] args )
     {
 
@@ -28,8 +32,6 @@ public class App implements RequestHandler<Map<String, Object>, String>
       int idValue = Integer.parseInt(id); //this code will convert id to string
        String message = "";
       
-      AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
-      DynamoDB ddb = new DynamoDB(client);
       
       //retrieve single talbe entry
       try {
