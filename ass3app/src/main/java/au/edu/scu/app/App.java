@@ -14,7 +14,6 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 
 
-
 public class App implements RequestHandler<Map<String, Object>, String>
 {
     public static void main( String[] args )
@@ -24,21 +23,31 @@ public class App implements RequestHandler<Map<String, Object>, String>
     @Override
     public String handleRequest(Map<String, Object> input, Context context) {
         
-      int id = (int) input.get("id");
+        //initialise variables
+      String id = (String) input.get("id");
+      int idValue = Integer.parseInt(id); //this code will convert id to string
        String message = "";
-       
-       
-      //retrieve Car table entry
-      AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build(); 
+      
+      AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
       DynamoDB ddb = new DynamoDB(client);
       
-      
+      //retrieve single talbe entry
       try {
-      Table table = ddb.getTable("Car");
+      Table table = ddb.getTable("Car"); //access to target ddb table Car
+      
+     GetItemSpec spec = new GetItemSpec()
+     .withPrimaryKey("Id", idValue)
+     .withProjectionExpression("Id, Make, Model, Year, Colour")
+     .withConsistentRead(true);
 
-      Item item = table.getItem("Id", id);
-
-      message = item.toJSONPretty();
+      
+      Item item = table.getItem(spec);
+    //   String make = item.getItem("Make");
+    //   String model = item.getItem("Model");
+    //   int year = item.getInt("Year");
+    //   String colour = item.getItem("Colour");
+      
+      message = item.toString();
       return message;
 
       }
